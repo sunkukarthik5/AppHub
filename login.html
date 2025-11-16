@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Hub - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        :root {
+            --primary-red: #e53935;
+            --dark-red: #c62828;
+            --light-red: #ff5252;
+            --accent-red: #ff8a80;
+            --white: #ffffff;
+            --light-bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --text-dark: #333333;
+            --text-muted: #666666;
+            --success: #4caf50;
+            --error: #f44336;
+        }
+
+        body {
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(229, 57, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 82, 82, 0.05) 0%, transparent 50%),
+                linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f0f0f0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Elements */
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            background: linear-gradient(45deg, var(--primary-red), var(--accent-red));
+            border-radius: 50%;
+            opacity: 0.08;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 120px;
+            height: 120px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        .shape:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            top: 30%;
+            right: 25%;
+            animation-delay: -15s;
+        }
+
+        /* Pulse Animation */
+        .pulse-circle {
+            position: absolute;
+            border: 2px solid rgba(229, 57, 53, 0.15);
+            border-radius: 50%;
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        .pulse-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .pulse-circle:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            bottom: -200px;
+            left: -200px;
+            animation-delay: -2s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 30px 0;
+            animation: slideUp 1s ease-out;
+        }
+
+        .card {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            min-height: 580px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(229, 57, 53, 0.1);
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 40px rgba(229, 57, 53, 0.15);
+            transform: translateY(-5px);
+            border: 2px solid rgba(229, 57, 53, 0.3);
+            box-shadow: 0 0 20px rgba(229, 57, 53, 0.4);
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            width: 45%;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 30s infinite linear;
+        }
+
+        .welcome-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            position: relative;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        /* App Icon with Glowing Effect */
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+
+        .app-icon i {
+            font-size: 42px;
+            color: white;
+        }
+
+        /* App Name Styling - Modern Design */
+        .logo-text {
+            font-size: 42px;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            color: white;
+            margin-top: 15px;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .welcome-content h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .welcome-content p {
+            font-size: 16px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            border: 2px solid white;
+            border-radius: 30px;
+            font-size: 16px;
+            text-decoration: none;
+            font-weight: 600;
+            color: white;
+            transition: all 0.4s ease;
+            background: transparent;
+            cursor: pointer;
+            animation: fadeInUp 1s ease-out 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: white;
+            color: var(--primary-red);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Form Section */
+        .form-section {
+            width: 55%;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .form-header h2 {
+            font-size: 32px;
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        /* Forms */
+        .form-container {
+            position: relative;
+            height: 380px;
+            overflow: hidden;
+        }
+
+        .form {
+            position: absolute;
+            width: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+        }
+
+        .register-form {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .login-form {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .form-active .register-form {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        .form-active .login-form {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.3s; }
+        .form-group:nth-child(3) { animation-delay: 0.4s; }
+        .form-group:nth-child(4) { animation-delay: 0.5s; }
+
+        .input-container {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 55px 16px 55px;
+            border: none;
+            border-bottom: 2px solid #e0e0e0;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--text-dark);
+            border-radius: 0;
+        }
+
+        .form-group input:hover {
+            border-bottom-color: var(--light-red);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-bottom-color: var(--primary-red);
+            box-shadow: 0 5px 10px rgba(229, 57, 53, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            z-index: 2;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            z-index: 2;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-red);
+        }
+
+        .form-group input:focus + .input-icon {
+            color: var(--primary-red);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin-top: 10px;
+            box-shadow: 0 5px 20px rgba(229, 57, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .form-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(229, 57, 53, 0.4);
+        }
+
+        .form-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .form-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .form-btn:hover:before {
+            left: 100%;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        .remember-me label {
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-checkbox {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            margin-right: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:hover {
+            border-color: var(--light-red);
+        }
+
+        .remember-me input:checked + .custom-checkbox {
+            background-color: var(--primary-red);
+            border-color: var(--primary-red);
+        }
+
+        .remember-me input:checked + .custom-checkbox::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .forgot-password {
+            color: var(--primary-red);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .forgot-password:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-red);
+            transition: width 0.3s ease;
+        }
+
+        .forgot-password:hover:after {
+            width: 100%;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 18px 28px;
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            border-left: 4px solid var(--primary-red);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            margin-right: 12px;
+            font-size: 22px;
+        }
+
+        .toast.success i {
+            color: var(--success);
+        }
+
+        .toast.error i {
+            color: var(--error);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translateY(-20px) rotate(120deg) scale(1.1);
+            }
+            66% {
+                transform: translateY(10px) rotate(240deg) scale(0.9);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 0.2;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.4;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                max-width: 700px;
+            }
+            
+            .welcome-content h1 {
+                font-size: 32px;
+            }
+            
+            .form-header h2 {
+                font-size: 28px;
+            }
+            
+            .app-icon {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .app-icon i {
+                font-size: 36px;
+            }
+            
+            .logo-text {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                flex-direction: column;
+                min-height: auto;
+            }
+            
+            .welcome-section,
+            .form-section {
+                width: 100%;
+            }
+            
+            .welcome-section {
+                padding: 40px 30px;
+                border-right: none;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .form-section {
+                padding: 50px 40px;
+            }
+            
+            .welcome-content h1 {
+                font-size: 28px;
+            }
+            
+            .form-header h2 {
+                font-size: 26px;
+            }
+            
+            .app-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .app-icon i {
+                font-size: 32px;
+            }
+            
+            .logo-text {
+                font-size: 32px;
+            }
+            
+            .form-container {
+                height: auto;
+                min-height: 380px;
+            }
+            
+            .form {
+                position: relative;
+                transform: none;
+                opacity: 1;
+                transition: none;
+            }
+            
+            .form-active .register-form,
+            .form-active .login-form {
+                transform: none;
+                opacity: 1;
+            }
+            
+            .register-form {
+                display: block;
+            }
+            
+            .login-form {
+                display: none;
+            }
+            
+            .form-active .register-form {
+                display: none;
+            }
+            
+            .form-active .login-form {
+                display: block;
+            }
+            
+            .toast {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                margin: 15px 0;
+            }
+            
+            .card {
+                border-radius: 15px;
+            }
+            
+            .welcome-section {
+                padding: 30px 20px;
+            }
+            
+            .form-section {
+                padding: 40px 25px;
+            }
+            
+            .welcome-content h1 {
+                font-size: 24px;
+            }
+            
+            .form-header h2 {
+                font-size: 22px;
+            }
+            
+            .app-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .app-icon i {
+                font-size: 28px;
+            }
+            
+            .logo-text {
+                font-size: 28px;
+            }
+            
+            .welcome-content p,
+            .form-header p {
+                font-size: 14px;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 15px;
+            }
+            
+            .form-group input {
+                padding: 14px 50px 14px 50px;
+                font-size: 15px;
+            }
+            
+            .options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .forgot-password {
+                align-self: flex-end;
+            }
+            
+            .shape:nth-child(1) {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .shape:nth-child(2) {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .shape:nth-child(3) {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .shape:nth-child(4) {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .welcome-section {
+                padding: 25px 15px;
+            }
+            
+            .form-section {
+                padding: 30px 20px;
+            }
+            
+            .form-header {
+                margin-bottom: 30px;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-group input {
+                padding: 12px 45px 12px 45px;
+            }
+            
+            .input-icon,
+            .toggle-password {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="pulse-circle"></div>
+        <div class="pulse-circle"></div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <div class="welcome-content">
+                    <div class="logo">
+                        <div class="app-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="logo-text">APP HUB</div>
+                    </div>
+                    <h1 id="welcomeTitle">Welcome Back!</h1>
+                    <p id="welcomeText">To keep connected with us please login with your credentials</p>
+                    <a href="#" class="btn" id="toggleFormBtn">Sign In</a>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <div class="form-header">
+                    <h2 id="formTitle">Create Account</h2>
+                    <p id="formSubtitle">Join App Hub today</p>
+                </div>
+
+                <div class="form-container" id="formContainer">
+                    <!-- Register Form -->
+                    <form class="form register-form" id="registerForm">
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="text" id="fullName" placeholder="Full Name" required>
+                                <i class="fas fa-user input-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="email" id="registerEmail" placeholder="Email Address" required>
+                                <i class="fas fa-envelope input-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="password" id="registerPassword" placeholder="Password" required>
+                                <i class="fas fa-lock input-icon"></i>
+                                <i class="fas fa-eye toggle-password" id="toggleRegisterPassword"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                                <i class="fas fa-lock input-icon"></i>
+                                <i class="fas fa-eye toggle-password" id="toggleConfirmPassword"></i>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="form-btn" id="registerButton">
+                            Sign Up
+                        </button>
+                    </form>
+
+                    <!-- Login Form -->
+                    <form class="form login-form" id="loginForm">
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="email" id="loginEmail" placeholder="Email Address" required>
+                                <i class="fas fa-envelope input-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="password" id="loginPassword" placeholder="Password" required>
+                                <i class="fas fa-lock input-icon"></i>
+                                <i class="fas fa-eye toggle-password" id="toggleLoginPassword"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <div class="custom-checkbox"></div>
+                                <label for="remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+                        
+                        <button type="submit" class="form-btn" id="loginButton">
+                            Sign In
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // DOM Elements
+        const formContainer = document.getElementById('formContainer');
+        const toggleFormBtn = document.getElementById('toggleFormBtn');
+        const welcomeTitle = document.getElementById('welcomeTitle');
+        const welcomeText = document.getElementById('welcomeText');
+        const formTitle = document.getElementById('formTitle');
+        const formSubtitle = document.getElementById('formSubtitle');
+        const registerForm = document.getElementById('registerForm');
+        const loginForm = document.getElementById('loginForm');
+        const toast = document.getElementById('toast');
+
+        // Store registered users in localStorage
+        let registeredUsers = JSON.parse(localStorage.getItem('apphub-users')) || [];
+
+        // Form switching
+        let isLoginForm = false;
+
+        toggleFormBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            isLoginForm = !isLoginForm;
+            
+            if (isLoginForm) {
+                // Switch to login
+                formContainer.classList.add('form-active');
+                welcomeTitle.textContent = 'New Here?';
+                welcomeText.textContent = 'Join App Hub and discover amazing applications';
+                toggleFormBtn.textContent = 'Sign Up';
+                formTitle.textContent = 'Welcome Back';
+                formSubtitle.textContent = 'Sign in to your account';
+            } else {
+                // Switch to register
+                formContainer.classList.remove('form-active');
+                welcomeTitle.textContent = 'Welcome Back!';
+                welcomeText.textContent = 'To keep connected with us please login with your credentials';
+                toggleFormBtn.textContent = 'Sign In';
+                formTitle.textContent = 'Create Account';
+                formSubtitle.textContent = 'Join App Hub today';
+            }
+        });
+
+        // Password visibility toggle
+        function setupPasswordToggle(passwordId, toggleId) {
+            const passwordInput = document.getElementById(passwordId);
+            const toggleIcon = document.getElementById(toggleId);
+            
+            toggleIcon.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        // Initialize password toggles
+        setupPasswordToggle('registerPassword', 'toggleRegisterPassword');
+        setupPasswordToggle('confirmPassword', 'toggleConfirmPassword');
+        setupPasswordToggle('loginPassword', 'toggleLoginPassword');
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Validate password strength
+        function isValidPassword(password) {
+            return password.length >= 6;
+        }
+
+        // Check if passwords match
+        function passwordsMatch(password, confirmPassword) {
+            return password === confirmPassword;
+        }
+
+        // Check if user already exists
+        function userExists(email) {
+            return registeredUsers.some(user => user.email === email);
+        }
+
+        // Authenticate user
+        function authenticateUser(email, password) {
+            return registeredUsers.find(user => 
+                user.email === email && user.password === password
+            );
+        }
+
+        // Handle registration form submission
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validate inputs
+            if (!fullName) {
+                showToast('Please enter your full name', 'error');
+                document.getElementById('fullName').focus();
+                return;
+            }
+            
+            if (!email) {
+                showToast('Please enter your email address', 'error');
+                document.getElementById('registerEmail').focus();
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address', 'error');
+                document.getElementById('registerEmail').focus();
+                return;
+            }
+            
+            // Check if user already exists
+            if (userExists(email)) {
+                showToast('An account with this email already exists', 'error');
+                document.getElementById('registerEmail').focus();
+                return;
+            }
+            
+            if (!password) {
+                showToast('Please create a password', 'error');
+                document.getElementById('registerPassword').focus();
+                return;
+            }
+            
+            if (!isValidPassword(password)) {
+                showToast('Password must be at least 6 characters', 'error');
+                document.getElementById('registerPassword').focus();
+                return;
+            }
+            
+            if (!passwordsMatch(password, confirmPassword)) {
+                showToast('Passwords do not match', 'error');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            
+            // Show loading state
+            const registerButton = document.getElementById('registerButton');
+            const originalText = registerButton.innerHTML;
+            registerButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            registerButton.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Create new user
+                const newUser = {
+                    id: Date.now(),
+                    fullName: fullName,
+                    email: email,
+                    password: password,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add to registered users
+                registeredUsers.push(newUser);
+                
+                // Save to localStorage
+                localStorage.setItem('apphub-users', JSON.stringify(registeredUsers));
+                
+                showToast('Account created successfully! Welcome to App Hub.', 'success');
+                
+                // Clear form
+                registerForm.reset();
+                
+                // Switch to login form
+                isLoginForm = true;
+                formContainer.classList.add('form-active');
+                welcomeTitle.textContent = 'New Here?';
+                welcomeText.textContent = 'Join App Hub and discover amazing applications';
+                toggleFormBtn.textContent = 'Sign Up';
+                formTitle.textContent = 'Welcome Back';
+                formSubtitle.textContent = 'Sign in to your account';
+                
+                // Reset button
+                registerButton.innerHTML = originalText;
+                registerButton.disabled = false;
+            }, 2000);
+        });
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            // Validate inputs
+            if (!email) {
+                showToast('Please enter your email address', 'error');
+                document.getElementById('loginEmail').focus();
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address', 'error');
+                document.getElementById('loginEmail').focus();
+                return;
+            }
+            
+            if (!password) {
+                showToast('Please enter your password', 'error');
+                document.getElementById('loginPassword').focus();
+                return;
+            }
+            
+            // Show loading state
+            const loginButton = document.getElementById('loginButton');
+            const originalText = loginButton.innerHTML;
+            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+            loginButton.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Check if user exists and credentials are correct
+                const user = authenticateUser(email, password);
+                
+                if (user) {
+                    showToast('Login successful! Welcome back.', 'success');
+                    
+                    // Store current user session
+                    localStorage.setItem('apphub-current-user', JSON.stringify(user));
+                    
+                    // Reset button
+                    loginButton.innerHTML = originalText;
+                    loginButton.disabled = false;
+                    
+                    // ✅ REDIRECT TO DASHBOARD
+                    window.location.href = "index.html";
+                } else {
+                    // Check if user exists but password is wrong
+                    if (userExists(email)) {
+                        showToast('Incorrect password. Please try again.', 'error');
+                    } else {
+                        showToast('No account found with this email. Please register first.', 'error');
+                    }
+                    
+                    // Reset button
+                    loginButton.innerHTML = originalText;
+                    loginButton.disabled = false;
+                }
+            }, 2000);
+        });
+
+        // Forgot password handler
+        document.querySelector('.forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const email = prompt('Please enter your email address to reset your password:');
+            
+            if (email && isValidEmail(email)) {
+                if (userExists(email)) {
+                    showToast('Password reset instructions sent to your email', 'success');
+                } else {
+                    showToast('No account found with this email address', 'error');
+                }
+            } else if (email) {
+                showToast('Please enter a valid email address', 'error');
+            }
+        });
+
+        // Auto-switch to login if users exist
+        window.addEventListener('load', function() {
+            if (registeredUsers.length > 0) {
+                // If users exist, default to login form
+                isLoginForm = true;
+                formContainer.classList.add('form-active');
+                welcomeTitle.textContent = 'New Here?';
+                welcomeText.textContent = 'Join App Hub and discover amazing applications';
+                toggleFormBtn.textContent = 'Sign Up';
+                formTitle.textContent = 'Welcome Back';
+                formSubtitle.textContent = 'Sign in to your account';
+            }
+        });
+    </script>
+</body>
+</html>
